@@ -1,0 +1,5 @@
+    * have get methods working
+    * code delete and put methods
+    * think about post possibility
+    * doc (man page, API)
+    * possibility to package this easily for debian and maybe other package formats…
