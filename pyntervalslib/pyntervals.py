@@ -1,19 +1,16 @@
-#!/usr/bin/env python
 # -*- encoding: utf-8 -*-
-#import time
-import optparse
-#import httplib2
+
 import urllib2
-#import re
 import base64
 import json
+#import time
+#import re
+#import httplib2
 
 class Pyntervals:
     '''
-    Todo: put this class into other file… here only for some development speed starting
     Todo: have un config ini file for token as alternate touse param to get it
     '''
-    VERSION = '0.1'
     actions_allowed = [
             'client', 
             'contactdescriptor', 
@@ -42,6 +39,7 @@ class Pyntervals:
             'timer',
             'worktype'
             ]
+    actions_only_one = ['me']
 
     def __init__(self, token):
         '''
@@ -51,6 +49,8 @@ class Pyntervals:
         self.password = 'X'
         self.top_url  = 'https://api.myintervals.com/'
         self.use_python() # by default
+        self.group = self.get_action('me')[u'group']
+        self.errors = []
 
 
     def use_python(self):
@@ -95,48 +95,38 @@ class Pyntervals:
         
         self.request.add_header("Content-type", "application/json")
 
-    def am_i_administrator(self):
-        return self.get_me()[u'group'] == 'Administrator'
+    def is_administrator(self):
+        return self.group == 'Administrator'
 
-    def action_exists(self, action):
+    @staticmethod
+    def action_exists(action):
         '''
         Check if given action exist into API
         '''
         return action in Pyntervals.actions_allowed
    
-
-    def get_client(self):
-        self.get_action('client')
-        return json.loads(self.last_response)[u'client']
-
-    def get_me(self):
-        self.get_action('me')
-
+    def filter_response(self, field, only_one = False):
         if self.python:
-            return json.loads(self.last_response)[u'me'].pop()
+            if only_one:
+                return json.loads(self.last_response)[field].pop()
+            else:
+                return json.loads(self.last_response)[field]
         else:
             return self.last_response
 
-    def get_person(self, id = None):
-        self.get_action('person')
-        return json.loads(self.last_response)[u'person']
 
-    def get_timer(self):
-        self.get_action('timer')
-        return json.loads(self.last_response)[u'timer']
+    def get_action(self, string_action, id = None):
+        full_string_action = string_action;
 
-    def get_time(self):
-        self.get_action('time')
-        return json.loads(self.last_response)[u'time']
+        if id:
+            full_string_action = string_action + '/' + id + '/'
 
-    def get_action(self, string_action):
-        self.request = urllib2.Request(self.top_url + string_action)
+        self.request = urllib2.Request(self.top_url + full_string_action)
         self.set_accept_json_or_xml()
         self.login()
         self.run()
-
-    def get_action_by_id(self, string_action, id):
-        self.get_action(string_action + '/' + id + '/')
+        
+        return self.filter_response(string_action, string_action in Pyntervals.actions_only_one)
 
     def action(self, string_action, method):
         self.request = urllib2.Request(self.top_url + string_action)
@@ -169,31 +159,6 @@ class Pyntervals:
             handle = urllib2.urlopen(self.request)
             self.last_response = handle.read()
         except IOError, e:
-            print "It looks like the token is wrong."
+            self.errors.append("It looks like the token is wrong.")
             #sys.exit(1)
 
-
-def main():
-    parser = optparse.OptionParser(version="%prog " + Pyntervals.VERSION)
-    parser.add_option("-t", "--token", dest="token", help=u"Token you must get from http://xx.timetask.com/account/api in order to use this tool.", metavar="STRING")
-    parser.add_option("--id", dest='id', help=u"Use given ID for some actions to have specific one intead of several of them", metavar='INTEGER')
-    parser.add_option("--me", action='store_true', dest='me', help=u"Get informations about… me, hum, no, you sorry… but you it is me here… well, you understand what I mean :)")
-    parser.add_option("--xml", action='store_true', dest='xml', help=u"Returns response as XML. If not given, JSON is used.")
-    (options, args) = parser.parse_args()
-
-    if options.token:
-        p = Pyntervals(options.token)
-
-        if options.xml:
-            p.use_xml()
-        else:
-            p.use_json()
-
-        if options.me:
-            print p.get_me()
-        
-
-
-
-if __name__ == "__main__":
-    main()
