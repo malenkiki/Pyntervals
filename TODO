@@ -1,4 +1,8 @@
     * have get methods working
+    * priority for collections aspect of the API
+    * use shorthand parameters for filters often used? (offset, limit, search…)
+    * Collection: imrove it
+    * Collection: YAML file to set up filter?
     * code delete and put methods
     * think about post possibility
     * doc (man page, API)

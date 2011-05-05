@@ -49,9 +49,20 @@ class Pyntervals:
         self.password = 'X'
         self.top_url  = 'https://api.myintervals.com/'
         self.use_python() # by default
-        self.group = self.get_action('me')[u'group']
+        self.query_string = ''
         self.errors = []
+        self.group = self.get_action('me')[u'group']
 
+    def set_query_string(self, q_str):
+        if len(q_str):
+            self.query_string = q_str
+
+
+    def get_query_string(self):
+        if len(self.query_string):
+            return '?' + self.query_string
+        else:
+            return ''
 
     def use_python(self):
         self.use_json()
@@ -116,26 +127,17 @@ class Pyntervals:
 
 
     def get_action(self, string_action, id = None):
-        full_string_action = string_action;
+        full_string_action = string_action + '/';
 
         if id:
             full_string_action = string_action + '/' + id + '/'
 
-        self.request = urllib2.Request(self.top_url + full_string_action)
+        self.request = urllib2.Request(self.top_url + full_string_action + self.get_query_string())
         self.set_accept_json_or_xml()
         self.login()
         self.run()
         
         return self.filter_response(string_action, string_action in Pyntervals.actions_only_one)
-
-    def action(self, string_action, method):
-        self.request = urllib2.Request(self.top_url + string_action)
-        self.set_accept_json_or_xml()
-        
-        if method.lower() in ['post', 'put']:
-            self.set_content_type_json_or_xml()
-
-        self.login()
 
     def put_action(self, string_action):
         '''

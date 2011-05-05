@@ -2,7 +2,9 @@
 # -*- encoding: utf-8 -*-
 import optparse
 import pyntervalslib
+import sys
 from pyntervalslib.pyntervals import Pyntervals
+from pyntervalslib.collection import Collection
 from pyntervalslib.version import APP_VERSION
 
 
@@ -10,20 +12,46 @@ def main():
     parser = optparse.OptionParser(version="%prog " + APP_VERSION)
     parser.add_option("-t", "--token", dest="token", help=u"Token you must get from http://xx.timetask.com/account/api in order to use this tool.", metavar="STRING")
     parser.add_option("--id", dest='id', help=u"Use given ID for some actions to have specific one intead of several of them", metavar='INTEGER')
-    parser.add_option("--action", action='store', dest='action', help=u"Action to do with API")
-    parser.add_option("--xml", action='store_true', dest='xml', help=u"Returns response as XML. If not given, JSON is used.")
+    parser.add_option('-a', "--action", action='store', dest='action', help=u"Action to do with API. Valid actions are: " + ', '.join(Pyntervals.actions_allowed), metavar='STRING')
+    parser.add_option('-f', "--filter", dest='filters', action='append', help=u"Set one filter. Call it for each filter you want use.", metavar='STRING')
+    #parser.add_option("--offset", dest='offset', help=u"Give an offset for returned list", metavar='INTEGER')
+    #parser.add_option("--limit", dest='limit', help=u"Give a limit for returned list", metavar='INTEGER')
+    #parser.add_option("--search", dest='search', help=u"Returns list that follow the given pattern", metavar='STRING')
+    parser.add_option("--list-actions", action='store_true', dest='list_actions', help=u"Print list of available actions.")
+    parser.add_option("-x", "--xml", action='store_true', dest='xml', help=u"Returns response as XML. If not given, JSON is used.")
     (options, args) = parser.parse_args()
+
+
+        
+
+    if options.list_actions:
+        print "\n".join(Pyntervals.actions_allowed)
 
     if options.token:
         p = Pyntervals(options.token)
+        
+        if options.filters:
+            col = Collection(options.action)
+            for i in options.filters:
+                key_value = i.split('=')
+                if len(key_value) == 2:
+                    col.add_filter(key_value[0], key_value[1])
+                else:
+                    print "A filter must match key=value pattern!"
+                    sys.exit(1)
+            p.set_query_string(col.build_query_string())
 
         if options.xml:
             p.use_xml()
         else:
             p.use_json()
 
+
         if Pyntervals.action_exists(options.action):
             print p.get_action(options.action, options.id)
+        else:
+            print 'You must give an existing action from the followings: ' + ', '.join(Pyntervals.actions_allowed)
+            sys.exit(1)
 
 if __name__ == "__main__":
     main()
