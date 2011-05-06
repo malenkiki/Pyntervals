@@ -50,7 +50,6 @@ class Pyntervals:
         self.top_url  = 'https://api.myintervals.com/'
         self.use_python() # by default
         self.query_string = ''
-        self.errors = []
         self.group = self.get_action('me')[u'group']
 
     def set_query_string(self, q_str):
@@ -157,10 +156,6 @@ class Pyntervals:
         '''
 
     def run(self):
-        try:
-            handle = urllib2.urlopen(self.request)
-            self.last_response = handle.read()
-        except IOError, e:
-            self.errors.append("It looks like the token is wrong.")
-            #sys.exit(1)
+        handle = urllib2.urlopen(self.request)
+        self.last_response = handle.read()
 

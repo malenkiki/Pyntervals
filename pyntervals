@@ -3,6 +3,7 @@
 import optparse
 import pyntervalslib
 import sys
+#import urllib2
 from pyntervalslib.pyntervals import Pyntervals
 from pyntervalslib.collection import Collection
 from pyntervalslib.version import APP_VERSION
@@ -14,9 +15,11 @@ def main():
     parser.add_option("--id", dest='id', help=u"Use given ID for some actions to have specific one intead of several of them", metavar='INTEGER')
     parser.add_option('-a', "--action", action='store', dest='action', help=u"Action to do with API. Valid actions are: " + ', '.join(Pyntervals.actions_allowed), metavar='STRING')
     parser.add_option('-f', "--filter", dest='filters', action='append', help=u"Set one filter. Call it for each filter you want use.", metavar='STRING')
-    #parser.add_option("--offset", dest='offset', help=u"Give an offset for returned list", metavar='INTEGER')
-    #parser.add_option("--limit", dest='limit', help=u"Give a limit for returned list", metavar='INTEGER')
-    #parser.add_option("--search", dest='search', help=u"Returns list that follow the given pattern", metavar='STRING')
+    parser.add_option("--offset", dest='offset', help=u"Give an offset for returned list", metavar='INTEGER')
+    parser.add_option("--limit", dest='limit', help=u"Give a limit for returned list", metavar='INTEGER')
+    parser.add_option("--search", dest='search', help=u"Returns list that follow the given pattern", metavar='STRING')
+    parser.add_option("--csv", dest='csv', help=u"Export result as CSV file", metavar='FILE')
+    parser.add_option('-F', "--csv-fields", dest='csv_fields', action='append', help=u"If export as CSV is selected, this option allow you give what field to display in sort you want.", metavar='STRING')
     parser.add_option("--list-actions", action='store_true', dest='list_actions', help=u"Print list of available actions.")
     parser.add_option("-x", "--xml", action='store_true', dest='xml', help=u"Returns response as XML. If not given, JSON is used.")
     (options, args) = parser.parse_args()
@@ -28,8 +31,15 @@ def main():
         print "\n".join(Pyntervals.actions_allowed)
 
     if options.token:
-        p = Pyntervals(options.token)
-        
+        try:
+            p = Pyntervals(options.token)
+        except AttributeError, e:
+            print "It looks like the token is wrong."
+            sys.exit(1)
+        except Exception, e:
+            print "It looks like the token is wrong."
+            sys.exit(1)
+
         if options.filters:
             col = Collection(options.action)
             for i in options.filters:
