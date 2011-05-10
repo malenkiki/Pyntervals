@@ -18,7 +18,7 @@ def main():
     parser.add_option("--offset", dest='offset', help=u"Give an offset for returned list", metavar='INTEGER')
     parser.add_option("--limit", dest='limit', help=u"Give a limit for returned list", metavar='INTEGER')
     parser.add_option("--search", dest='search', help=u"Returns list that follow the given pattern", metavar='STRING')
-    parser.add_option("--csv", dest='csv', help=u"Export result as CSV file", metavar='FILE')
+    parser.add_option("--report-time", dest='report_time', help=u"Export time as CSV file. If you are admin, returns times for all members, if not, returns only yours. By default, outputs previous month, but you can choose date range by using filters.", metavar='FILE')
     parser.add_option('-F', "--csv-fields", dest='csv_fields', action='append', help=u"If export as CSV is selected, this option allow you give what field to display in sort you want.", metavar='STRING')
     parser.add_option("--list-actions", action='store_true', dest='list_actions', help=u"Print list of available actions.")
     parser.add_option("-x", "--xml", action='store_true', dest='xml', help=u"Returns response as XML. If not given, JSON is used.")
@@ -51,17 +51,54 @@ def main():
                     sys.exit(1)
             p.set_query_string(col.build_query_string())
 
+        if options.report_time:
+            import HTMLParser
+
+            h = HTMLParser.HTMLParser()
+            
+            if Pyntervals.action_exists(options.action):
+                list_action = p.get_action(options.action, options.id)
+
+            if len(list_action) > 0:
+                allowed_fields = ['date','time','description','billable','client','project','module','worktype','firstname','lastname']
+                import csv
+                output_file  = open(options.report_time, "wb")
+                writer = csv.writer(output_file, delimiter=';', quotechar='"', quoting=csv.QUOTE_ALL)
+                for item in list_action:
+                    row = []
+                    for k in allowed_fields:
+                        if k == 'date':
+                            row.append(item[k])
+                            list_date = item[k].rsplit('/')
+                            for idx in range(3):
+                                row.append(list_date[idx])
+                            continue
+                        if k == 'billable':
+                            if item[k] == 'f':
+                                row.append('no')
+                                continue
+                            else:
+                                row.append('yes')
+                                continue
+                        row.append(h.unescape(item[k]).encode('utf-8'))
+                    row.append(h.unescape(item['lastname'] + ' ' + item['firstname']).encode('utf-8'))
+                    writer.writerow(row)
+                output_file.close()
+            sys.exit(0)
+
         if options.xml:
             p.use_xml()
         else:
             p.use_json()
 
-
         if Pyntervals.action_exists(options.action):
-            print p.get_action(options.action, options.id)
+            print obj_pyntervals.get_action(options.action, options.id)
         else:
             print 'You must give an existing action from the followings: ' + ', '.join(Pyntervals.actions_allowed)
             sys.exit(1)
+
+
+
 
 if __name__ == "__main__":
     main()
