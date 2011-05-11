@@ -92,7 +92,7 @@ def main():
             p.use_json()
 
         if Pyntervals.action_exists(options.action):
-            print obj_pyntervals.get_action(options.action, options.id)
+            print p.get_action(options.action, options.id)
         else:
             print 'You must give an existing action from the followings: ' + ', '.join(Pyntervals.actions_allowed)
             sys.exit(1)
