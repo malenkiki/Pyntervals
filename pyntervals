@@ -20,6 +20,7 @@ def main():
     parser.add_option("--search", dest='search', help=u"Returns list that follow the given pattern", metavar='STRING')
     parser.add_option("--report-time", dest='report_time', help=u"Export time as CSV file. If you are admin, returns times for all members, if not, returns only yours. By default, outputs previous month, but you can choose date range by using filters.", metavar='FILE')
     parser.add_option('-F', "--csv-fields", dest='csv_fields', action='append', help=u"If export as CSV is selected, this option allow you give what field to display in sort you want.", metavar='STRING')
+    parser.add_option("--csv", dest='csv', help=u"Export given action as CSV if it is a collection.", metavar='FILE')
     parser.add_option("--list-actions", action='store_true', dest='list_actions', help=u"Print list of available actions.")
     parser.add_option("-x", "--xml", action='store_true', dest='xml', help=u"Returns response as XML. If not given, JSON is used.")
     (options, args) = parser.parse_args()
