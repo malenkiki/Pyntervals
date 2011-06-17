@@ -1,28 +1,55 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
+import os
 import optparse
 import pyntervalslib
 import sys
 #import urllib2
+import locale
+import gettext
+from gettext import gettext as _
 from pyntervalslib.pyntervals import Pyntervals
 from pyntervalslib.collection import Collection
 from pyntervalslib.version import APP_VERSION
+from pyntervalslib.version import APP_NAME
 
+local_path = os.path.realpath(os.path.dirname(sys.argv[0])) + os.sep + 'locale'
+
+langs = []
+lc, encoding = locale.getdefaultlocale()
+if (lc):
+	#If we have a default, it's the first in the list
+	langs = [lc]
+# Now lets get all of the supported languages on the system
+language = os.environ.get('LANGUAGE', None)
+if (language):
+	"""langage comes back something like en_CA:en_US:en_GB:en
+	on linuxy systems, on Win32 it's nothing, so we need to
+	split it up into a list"""
+	langs += language.split(":")
+"""our defaults"""
+langs += ["fr_FR"]
+
+gettext.bindtextdomain(APP_NAME, local_path)
+gettext.textdomain(APP_NAME)
+
+lang = gettext.translation(APP_NAME, local_path, languages=langs, fallback = True)
+_ = lang.ugettext
 
 def main():
     parser = optparse.OptionParser(version="%prog " + APP_VERSION)
-    parser.add_option("-t", "--token", dest="token", help=u"Token you must get from http://xx.timetask.com/account/api in order to use this tool.", metavar="STRING")
-    parser.add_option("--id", dest='id', help=u"Use given ID for some actions to have specific one intead of several of them", metavar='INTEGER')
-    parser.add_option('-a', "--action", action='store', dest='action', help=u"Action to do with API. Valid actions are: " + ', '.join(Pyntervals.actions_allowed), metavar='STRING')
-    parser.add_option('-f', "--filter", dest='filters', action='append', help=u"Set one filter. Call it for each filter you want use.", metavar='STRING')
-    parser.add_option("--offset", dest='offset', help=u"Give an offset for returned list", metavar='INTEGER')
-    parser.add_option("--limit", dest='limit', help=u"Give a limit for returned list", metavar='INTEGER')
-    parser.add_option("--search", dest='search', help=u"Returns list that follow the given pattern", metavar='STRING')
-    parser.add_option("--report-time", dest='report_time', help=u"Export time as CSV file. If you are admin, returns times for all members, if not, returns only yours. By default, outputs previous month, but you can choose date range by using filters.", metavar='FILE')
-    parser.add_option('-F', "--csv-fields", dest='csv_fields', action='append', help=u"If export as CSV is selected, this option allow you give what field to display in sort you want.", metavar='STRING')
-    parser.add_option("--csv", dest='csv', help=u"Export given action as CSV if it is a collection.", metavar='FILE')
-    parser.add_option("--list-actions", action='store_true', dest='list_actions', help=u"Print list of available actions.")
-    parser.add_option("-x", "--xml", action='store_true', dest='xml', help=u"Returns response as XML. If not given, JSON is used.")
+    parser.add_option("-t", "--token", dest="token", help=_("Token you must get from http://xx.timetask.com/account/api in order to use this tool."), metavar=_("STRING"))
+    parser.add_option("--id", dest='id', help=_("Use given ID for some actions to have specific one intead of several of them"), metavar=_('INTEGER'))
+    parser.add_option('-a', "--action", action='store', dest='action', help=_("Action to do with API. Valid actions are: ") + ', '.join(Pyntervals.actions_allowed), metavar=_('STRING'))
+    parser.add_option('-f', "--filter", dest='filters', action='append', help=_("Set one filter. Call it for each filter you want use."), metavar=_('STRING'))
+    parser.add_option("--offset", dest='offset', help=_("Give an offset for returned list"), metavar=_('INTEGER'))
+    parser.add_option("--limit", dest='limit', help=_("Give a limit for returned list"), metavar=_('INTEGER'))
+    parser.add_option("--search", dest='search', help=_("Returns list that follow the given pattern"), metavar=_('STRING'))
+    parser.add_option("--report-time", dest='report_time', help=_("Export time as CSV file. If you are admin, returns times for all members, if not, returns only yours. By default, outputs previous month, but you can choose date range by using filters."), metavar=_('FILE'))
+    parser.add_option('-F', "--csv-fields", dest='csv_fields', action='append', help=_("If export as CSV is selected, this option allow you give what field to display in sort you want."), metavar=_('STRING'))
+    parser.add_option("--csv", dest='csv', help=_("Export given action as CSV if it is a collection."), metavar=_('FILE'))
+    parser.add_option("--list-actions", action='store_true', dest='list_actions', help=_("Print list of available actions."))
+    parser.add_option("-x", "--xml", action='store_true', dest='xml', help=_("Returns response as XML. If not given, JSON is used."))
     (options, args) = parser.parse_args()
 
 
@@ -35,10 +62,10 @@ def main():
         try:
             p = Pyntervals(options.token)
         except AttributeError, e:
-            print "It looks like the token is wrong."
+            print _("It looks like the token is wrong.")
             sys.exit(1)
         except Exception, e:
-            print "It looks like the token is wrong."
+            print _("It looks like the token is wrong.")
             sys.exit(1)
 
         if options.filters:
@@ -48,7 +75,7 @@ def main():
                 if len(key_value) == 2:
                     col.add_filter(key_value[0], key_value[1])
                 else:
-                    print "A filter must match key=value pattern!"
+                    print _("A filter must match key=value pattern!")
                     sys.exit(1)
             p.set_query_string(col.build_query_string())
 
@@ -95,7 +122,7 @@ def main():
         if Pyntervals.action_exists(options.action):
             print p.get_action(options.action, options.id)
         else:
-            print 'You must give an existing action from the followings: ' + ', '.join(Pyntervals.actions_allowed)
+            print _('You must give an existing action from the followings: ') + ', '.join(Pyntervals.actions_allowed)
             sys.exit(1)
 
 
