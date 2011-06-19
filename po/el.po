@@ -1,5 +1,4 @@
-# French translations for PACKAGE package
-# Traductions françaises du paquet PACKAGE.
+# Greek translations for PACKAGE package.
 # Copyright (C) 2011 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Michel Petit <petit.michel@gmail.com>, 2011.
@@ -8,62 +7,58 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-18 00:34+0200\n"
-"PO-Revision-Date: 2011-06-17 18:54+0200\n"
+"POT-Creation-Date: 2011-06-18 00:56+0200\n"
+"PO-Revision-Date: 2011-06-18 01:01+0200\n"
 "Last-Translator: Michel Petit <petit.michel@gmail.com>\n"
-"Language-Team: French\n"
-"Language: fr\n"
+"Language-Team: Greek\n"
+"Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../pyntervals:15 pyntervals:15 pyntervals:41
 msgid ""
 "Token you must get from http://xx.timetask.com/account/api in order to use "
 "this tool."
 msgstr ""
-"Vous devez obtenir votre jeton sur http://xx.timetask.com/account/api pour "
-"utiliser cet outil."
 
 #: ../pyntervals:15 ../pyntervals:17 ../pyntervals:18 ../pyntervals:21
 #: ../pyntervals:23 pyntervals:15 pyntervals:17 pyntervals:18 pyntervals:21
 #: pyntervals:23 pyntervals:41 pyntervals:43 pyntervals:44 pyntervals:47
 #: pyntervals:49
 msgid "STRING"
-msgstr "CHAÎNE"
+msgstr ""
 
 #: ../pyntervals:16 pyntervals:16 pyntervals:42
 msgid ""
 "Use given ID for some actions to have specific one intead of several of them"
 msgstr ""
-"Utilise le ID donné afin d’avoir pour certaines actions qu’un élément au "
-"lieu de plusieurs"
 
 #: ../pyntervals:16 ../pyntervals:19 ../pyntervals:20 pyntervals:16
 #: pyntervals:19 pyntervals:20 pyntervals:42 pyntervals:45 pyntervals:46
 msgid "INTEGER"
-msgstr "ENTIER"
+msgstr ""
 
 #: ../pyntervals:17 pyntervals:17 pyntervals:43
 msgid "Action to do with API. Valid actions are: "
-msgstr "Action à réaliser avec l’API. Les actions valides sont : "
+msgstr ""
 
 #: ../pyntervals:18 pyntervals:18 pyntervals:44
 msgid "Set one filter. Call it for each filter you want use."
-msgstr "Utilise un filtre. À appeler pour chaque filtre à utiliser."
+msgstr ""
 
 #: ../pyntervals:19 pyntervals:19 pyntervals:45
 msgid "Give an offset for returned list"
-msgstr "Donne un point de départ pour la liste retournée"
+msgstr ""
 
 #: ../pyntervals:20 pyntervals:20 pyntervals:46
 msgid "Give a limit for returned list"
-msgstr "Fournit une taille limite à la liste retournée"
+msgstr ""
 
 #: ../pyntervals:21 pyntervals:21 pyntervals:47
 msgid "Returns list that follow the given pattern"
-msgstr "Retourne une liste qui correspond au motif de recherche donné"
+msgstr ""
 
 #: ../pyntervals:22 pyntervals:22 pyntervals:48
 msgid ""
@@ -71,44 +66,38 @@ msgid ""
 "not, returns only yours. By default, outputs previous month, but you can "
 "choose date range by using filters."
 msgstr ""
-"Exporte les temps sous forme d’un fichier CSV. Si vous êtes administrateur, "
-"ça retournera les temps de tous les membres, dans le cas contraire ça ne "
-"retournera que les votres. Par défaut, le mois précédent est sorti, mais "
-"vous pouvez choisir un intervalle de date en utilisant les filtres."
 
 #: ../pyntervals:22 ../pyntervals:24 pyntervals:22 pyntervals:24 pyntervals:48
 #: pyntervals:50
 msgid "FILE"
-msgstr "FICHIER"
+msgstr "ΑΡΧΕΊΟ"
 
 #: ../pyntervals:23 pyntervals:23 pyntervals:49
 msgid ""
 "If export as CSV is selected, this option allow you give what field to "
 "display in sort you want."
 msgstr ""
-"Si l’export CSV est sélectionné, cette option vous permet de spécifier quels "
-"champs seront affichés et dans quel ordre vous les souhaitez."
 
 #: ../pyntervals:24 pyntervals:24 pyntervals:50
 msgid "Export given action as CSV if it is a collection."
-msgstr "Exporte l’action donnée comme un CSV si c’est une collection."
+msgstr ""
 
 #: ../pyntervals:25 pyntervals:25 pyntervals:51
 msgid "Print list of available actions."
-msgstr "Affiche la liste des actions disponibles."
+msgstr "Δείτε τη λίστα των διαθέσιμων ενεργειών."
 
 #: ../pyntervals:26 pyntervals:26 pyntervals:52
 msgid "Returns response as XML. If not given, JSON is used."
-msgstr "Retourne la réponse comme un XML. Si non précisé, JSON est utilisé."
+msgstr ""
 
 #: pyntervals:65 pyntervals:68
 msgid "It looks like the token is wrong."
-msgstr "Il se peut que le jeton soit erroné."
+msgstr ""
 
 #: pyntervals:78
 msgid "A filter must match key=value pattern!"
-msgstr "Un filtre doit correspondre au motif clé=valeur !"
+msgstr ""
 
 #: pyntervals:125
 msgid "You must give an existing action from the followings: "
-msgstr "Vous devez donner une action existante parmis les suivantes : "
+msgstr ""

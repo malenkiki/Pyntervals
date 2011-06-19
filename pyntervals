@@ -28,12 +28,12 @@ if (language):
 	split it up into a list"""
 	langs += language.split(":")
 """our defaults"""
-langs += ["fr_FR"]
+langs += ["fr_FR", 'ru_RU', 'el_GR']
 
 gettext.bindtextdomain(APP_NAME, local_path)
 gettext.textdomain(APP_NAME)
 
-lang = gettext.translation(APP_NAME, local_path, languages=langs, fallback = True)
+lang = gettext.translation(APP_NAME, local_path, languages=langs, fallback = False)
 _ = lang.ugettext
 
 def main():
